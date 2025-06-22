@@ -62,7 +62,59 @@ int qlott(unsigned char *image, int xp, int yp, int r, int g, int b, int xs, int
 }	
 
 
+
 double score (unsigned char *image, int x, int y)
+{
+	int ul,um,ur;
+	int ml,mm,mr;
+	int dl,dm,dr;
+
+	double totalr,totalg,totalb;
+	double avgr,avgg,avgb,sr,sg,sb,sd;
+
+	ul=((x-1)*3)+((y-1)*3*X_SIZE);
+	um=(x*3)+((y-1)*3*X_SIZE);
+	ur=((x+1)*3)+((y-1)*3*X_SIZE);
+
+	ml=((x-1)*3)+(y*3*X_SIZE);
+	mm=(x*3)+(y*3*X_SIZE);
+	mr=((x+1)*3)+(y*3*X_SIZE);
+
+	dl=((x-1)*3)+((y+1)*3*X_SIZE);
+	dm=(x*3)+((y+1)*3*X_SIZE);
+	dr=((x+1)*3)+((y+1)*3*X_SIZE);
+
+
+	totalr=image[ul]+image[um]+image[ur]+image[ml]+image[mm]+image[mr]+image[dl]+image[dm]+image[dr] ;
+	totalg=image[ul+1]+image[um+1]+image[ur+1]+image[ml+1]+image[mm+1]+image[mr+1]+image[dl+1]+image[dm+1]+image[dr+1] ;
+	totalb=image[ul+2]+image[um+2]+image[ur+2]+image[ml+2]+image[mm+2]+image[mr+2]+image[dl+2]+image[dm+2]+image[dr+2] ;
+
+	avgr=totalr/9;	
+	avgg=totalg/9;	
+	avgb=totalb/9;	
+
+	sr=((avgr-image[ul])*(avgr-image[ul]))+((avgr-image[ur])*(avgr-image[ur]))+((avgr-image[um])*(avgr-image[um]))+
+	   ((avgr-image[ml])*(avgr-image[ml]))+((avgr-image[mr])*(avgr-image[mr]))+((avgr-image[mm])*(avgr-image[mm]))+
+	   ((avgr-image[dl])*(avgr-image[dl]))+((avgr-image[dr])*(avgr-image[dr]))+((avgr-image[dm])*(avgr-image[dm]));
+
+	sg=((avgg-image[ul+1])*(avgg-image[ul+1]))+((avgg-image[ur+1])*(avgg-image[ur+1]))+((avgg-image[um+1])*(avgg-image[um+1]))+
+	   ((avgg-image[ml+1])*(avgg-image[ml+1]))+((avgg-image[mr+1])*(avgg-image[mr+1]))+((avgg-image[mm+1])*(avgg-image[mm+1]))+
+	   ((avgg-image[dl+1])*(avgg-image[dl+1]))+((avgg-image[dr+1])*(avgg-image[dr+1]))+((avgg-image[dm+1])*(avgg-image[dm+1]));
+
+
+	sb=((avgb-image[ul+2])*(avgb-image[ul+2]))+((avgb-image[ur+2])*(avgb-image[ur+2]))+((avgb-image[um+2])*(avgb-image[um+2]))+
+	   ((avgb-image[ml+2])*(avgb-image[ml+2]))+((avgb-image[mr+2])*(avgb-image[mr+2]))+((avgb-image[mm+2])*(avgb-image[mm+2]))+
+	   ((avgb-image[dl+2])*(avgb-image[dl+2]))+((avgb-image[dr+2])*(avgb-image[dr+2]))+((avgb-image[dm+2])*(avgb-image[dm+2]));
+
+	sd=sqrt(sr+sg+sb);
+
+	return sd;
+
+}
+
+
+
+double score_1 (unsigned char *image, int x, int y)
 {
 	int ul,um,ur;
 	int ml,mm,mr;
@@ -73,7 +125,7 @@ double score (unsigned char *image, int x, int y)
 
 	ul=((x-1)*3)+((y-1)*3*X_SIZE);
 	um=(x*3)+((y-1)*3*X_SIZE);
-	ul=((x+1)*3)+((y-1)*3*X_SIZE);
+	ur=((x+1)*3)+((y-1)*3*X_SIZE);
 
 	ml=((x-1)*3)+(y*3*X_SIZE);
 	mm=(x*3)+(y*3*X_SIZE);
@@ -81,7 +133,7 @@ double score (unsigned char *image, int x, int y)
 
 	dl=((x-1)*3)+((y+1)*3*X_SIZE);
 	dm=(x*3)+((y+1)*3*X_SIZE);
-	dl=((x+1)*3)+((y+1)*3*X_SIZE);
+	dr=((x+1)*3)+((y+1)*3*X_SIZE);
 
 
 	totalr=image[ul]+image[um]+image[ur]+image[ml]+image[mm]+image[mr]+image[dl]+image[dm]+image[dr] ;
@@ -94,42 +146,42 @@ double score (unsigned char *image, int x, int y)
 
 	sd=((avgr-image[ul])*(avgr-image[ul]))+
 	   ((avgg-image[ul+1])*(avgg-image[ul+1]))+
-	   ((avgb-image[ul+2])*(avgg-image[ul+2]))+
+	   ((avgb-image[ul+2])*(avgb-image[ul+2]))+
 	
 	   ((avgr-image[um])*(avgr-image[um]))+
 	   ((avgg-image[um+1])*(avgg-image[um+1]))+
-	   ((avgb-image[um+2])*(avgg-image[um+2]))+
+	   ((avgb-image[um+2])*(avgb-image[um+2]))+
 	
 	   ((avgr-image[ur])*(avgr-image[ur]))+
 	   ((avgg-image[ur+1])*(avgg-image[ur+1]))+
-	   ((avgb-image[ur+2])*(avgg-image[ur+2]))+
+	   ((avgb-image[ur+2])*(avgb-image[ur+2]))+
 
 
 	   ((avgr-image[ml])*(avgr-image[ml]))+
 	   ((avgg-image[ml+1])*(avgg-image[ml+1]))+
-	   ((avgb-image[ml+2])*(avgg-image[ml+2]))+
+	   ((avgb-image[ml+2])*(avgb-image[ml+2]))+
 
 	   ((avgr-image[mm])*(avgr-image[mm]))+
 	   ((avgg-image[mm+1])*(avgg-image[mm+1]))+
-	   ((avgb-image[mm+2])*(avgg-image[mm+2]))+
+	   ((avgb-image[mm+2])*(avgb-image[mm+2]))+
 
 	   ((avgr-image[mr])*(avgr-image[mr]))+
 	   ((avgg-image[mr+1])*(avgg-image[mr+1]))+
-	   ((avgb-image[mr+2])*(avgg-image[mr+2]))+
+	   ((avgb-image[mr+2])*(avgb-image[mr+2]))+
 
 
 
 	   ((avgr-image[dl])*(avgr-image[dl]))+
 	   ((avgg-image[dl+1])*(avgg-image[dl+1]))+
-	   ((avgb-image[dl+2])*(avgg-image[dl+2]))+
+	   ((avgb-image[dl+2])*(avgb-image[dl+2]))+
 
 	   ((avgr-image[dm])*(avgr-image[dm]))+
 	   ((avgg-image[dm+1])*(avgg-image[dm+1]))+
-	   ((avgb-image[dm+2])*(avgg-image[dm+2]))+
+	   ((avgb-image[dm+2])*(avgb-image[dm+2]))+
 
 	   ((avgr-image[dr])*(avgr-image[dr]))+
 	   ((avgg-image[dr+1])*(avgg-image[dr+1]))+
-	   ((avgb-image[dr+2])*(avgg-image[dr+2]));
+	   ((avgb-image[dr+2])*(avgb-image[dr+2]));
 
 	sd=sqrt(sd);
 
@@ -139,10 +191,26 @@ double score (unsigned char *image, int x, int y)
 
 
 
-void swap (unsigned char *image)
+void swap (unsigned char *image,int x, int y, int dxa, int dya, int dxb, int dyb)
 {
+	int sr,sg,sb;
+	int dr,dg,db;
 
+	sr=image[((x+dxa)*3)+(3*(y+dya)*X_SIZE)];
+	sg=image[((x+dxa)*3)+(3*(y+dya)*X_SIZE)+1];
+	sb=image[((x+dxa)*3)+(3*(y+dya)*X_SIZE)+2];
 
+	dr=image[((x+dxb)*3)+(3*(y+dyb)*X_SIZE)];
+	dg=image[((x+dxb)*3)+(3*(y+dyb)*X_SIZE)+1];
+	db=image[((x+dxb)*3)+(3*(y+dyb)*X_SIZE)+2];
+
+	image[((x+dxa)*3)+(3*(y+dya)*X_SIZE)]=dr;
+	image[((x+dxa)*3)+(3*(y+dya)*X_SIZE)+1]=dg;
+	image[((x+dxa)*3)+(3*(y+dya)*X_SIZE)+2]=db;
+
+	image[((x+dxb)*3)+(3*(y+dyb)*X_SIZE)]=sr;
+	image[((x+dxb)*3)+(3*(y+dyb)*X_SIZE)+1]=sg;
+	image[((x+dxb)*3)+(3*(y+dyb)*X_SIZE)+2]=sb;
 
 }
 
@@ -152,7 +220,7 @@ void swap (unsigned char *image)
 int main(int argc,char *argv[])
 {
 	unsigned char *image,*image3,*image4,*image5,*image6;
-	int i,loop,frame;
+	int i,j,loop,frame;
 
         image=(unsigned char *)malloc(sizeof (char)*X_SIZE*Y_SIZE*3); // disp buffer
 
@@ -160,130 +228,200 @@ int main(int argc,char *argv[])
 	char junk[30];
 
 
-
 	init_x();
 
 	frame=0;
 
 
+	for (i=0;i<3*X_SIZE*Y_SIZE;i+=3){ 
+
+		double intensity,red,green,blue,tot,r,g,b;
+
+		intensity=(double)(rand()%712000)/1000;
+
+		
+		red=(double)(rand()%10000)/10000;
+		green=(double)(rand()%10000)/10000;
+		blue=(double)(rand()%10000)/10000;
+		tot=red+green+blue;
+		
+		r=red*intensity/tot;
+		g=green*intensity/tot;
+		b=blue*intensity/tot;
+
+		if (r>255){r=255;}
+		if (g>255){g=255;}
+		if (b>255){b=255;}
+
+		image[i]=r;
+		image[i+1]=g;
+		image[i+2]=b;
+
+	}
+	/*
 	for (i=0;i<3*X_SIZE*Y_SIZE;i++){ image[i]=rand()%256;}
-	
+	for (i=0;i<X_SIZE;i++)
+	{ 
+		for (j=0;j<Y_SIZE;j++)
+		{
+			image[(i*3)+(j*3*X_SIZE)+0]=128+(127*sin((double)(((i*i))+(j*j))/26050));
+			image[(i*3)+(j*3*X_SIZE)+1]=128+(127*sin((double)(((i*i))+(j*j))/33070));
+			image[(i*3)+(j*3*X_SIZE)+2]=128+(127*sin((double)(((i*i))+(j*j))/57900));
+		}
+	} 
+
+	for (i=0;i<3*X_SIZE*Y_SIZE;i++){ image[i]=20+rand()%200;} */
+
+	//load_image (image,"sc.jpg",3);
+for (i=0;i<3*X_SIZE*Y_SIZE;i++){ image[i]=55+rand()%200;} 
 
 
-	double before,afteru,afterr;
+	double after[8];
+	double before;
+	double x,y;
+	long int f;
+	f=0;
 
+
+	x=4+rand()%(X_SIZE-8);y=4+rand()%(Y_SIZE-8);
+
+	x=X_SIZE/2; y=Y_SIZE/2;
 
 	while (1)
 	{
-		//swap(image2);
-		int x,y;
-		int sr,sg,sb,dr,dg,db;
-
-
-		x=2+rand()%(X_SIZE-4);y=2+rand()%(Y_SIZE-4);
-
 		
-		before = score(image,x,y);
-		before += score(image,x+1,y);
+
+		//for (x=4;x<X_SIZE-4;x++){
+		//for (y=4;y<Y_SIZE-4;y++){
 
 
-		// try up;
-		sr=image[(x*3)+(3*y*X_SIZE)];
-		sg=image[(x*3)+(3*y*X_SIZE)+1];
-		sb=image[(x*3)+(3*y*X_SIZE)+2];
+		before = score(image,x,y); 
 
-		dr=image[((x+1)*3)+(3*y*X_SIZE)];
-		dg=image[((x+1)*3)+(3*y*X_SIZE)+1];
-		db=image[((x+1)*3)+(3*y*X_SIZE)+2];
+		// try up
+		after[0]=before; after[0]+=score(image,x,y+6);
+			swap (image,x,y,0,-1,0,7);
+		after[0] -= score(image,x,y); after[0] -= score(image,x,y+6); 
+			swap (image,x,y,0,-1,0,7);
 
+		// try down
+		after[1]=before; after[1]+=score(image,x,y-6);
+			swap (image,x,y,0,1,0,-7);
+		after[1] -= score(image,x,y); after[1] -= score(image,x,y-6); 
+			swap (image,x,y,0,1,0,-7);
 
-		image[(x*3)+(3*y*X_SIZE)]=dr;
-		image[(x*3)+(3*y*X_SIZE)+1]=dg;
-		image[(x*3)+(3*y*X_SIZE)+2]=db;
+		// try right 
+		after[2]=before; after[2]+=score(image,x+6,y);
+			swap (image,x,y,-1,0,7,0);
+		after[2] -= score(image,x,y); after[2] -= score(image,x+6,y);
+			swap (image,x,y,-1,0,7,0);
 
-		image[((x+1)*3)+(3*y*X_SIZE)]=sr;
-		image[((x+1)*3)+(3*y*X_SIZE)+1]=sg;
-		image[((x+1)*3)+(3*y*X_SIZE)+2]=sb;
+		// try left 
+		after[3]=before; after[3]+=score(image,x-6,y);
+			swap (image,x,y,1,0,-7,0);
+		after[3] -= score(image,x,y); after[3] -= score(image,x-6,y);
+			swap (image,x,y,1,0,-7,0);
 
-		afteru = score(image,x,y);
-		afteru += score(image,x+1,y);
+		// try up right
+		after[4]=before; after[4]+=score(image,x+6,y+6);
+			swap (image,x,y,-1,-1,7,7);
+		after[4] -= score(image,x,y); after[4] -= score(image,x+6,y+6); 
+			swap (image,x,y,-1,-1,7,7);
 
-		// put it back;
-		//image[(x*3)+(3*y*X_SIZE)]=sr;
-		//image[(x*3)+(3*y*X_SIZE)+1]=sg;
-		//image[(x*3)+(3*y*X_SIZE)+2]=sb;
+		// try up left
+		after[5]=before; after[5]+=score(image,x-6,y+6);
+			swap (image,x,y,-1,1,7,-7);
+		after[5] -= score(image,x,y); after[5] -= score(image,x-6,y+6); 
+			swap (image,x,y,-1,1,7,-7);
 
-		image[((x+1)*3)+(3*y*X_SIZE)]=dr;
-		image[((x+1)*3)+(3*y*X_SIZE)+1]=dg;
-		image[((x+1)*3)+(3*y*X_SIZE)+2]=db;
+		// try down left
+		after[6]=before; after[6]+=score(image,x-6,y-6);
+			swap (image,x,y,1,1,-7,-7);
+		after[6] -= score(image,x,y); after[6] -= score(image,x-6,y-6); 
+			swap (image,x,y,1,1,-7,-7);
 
-		// try right;
-		dr=image[((x)*3)+(3*(y+1)*X_SIZE)];
-		dg=image[((x)*3)+(3*(y+1)*X_SIZE)+1];
-		db=image[((x)*3)+(3*(y+1)*X_SIZE)+2];
+		// try down right 
+		after[7]=before; after[7]+=score(image,x+6,y-6);
+			swap (image,x,y,-1,1,7,-7);
+		after[7] -= score(image,x,y); after[7] -= score(image,x+6,y-6); 
+			swap (image,x,y,-1,1,7,-7);
 
+		double m;
+		m=0;
+		int sel;
+		sel=100;
+		for (i=0;i<8;i++) { if (after[i]>m){ m=after[i]; sel=i; }}
 
-		image[(x*3)+(3*y*X_SIZE)]=dr;
-		image[(x*3)+(3*y*X_SIZE)+1]=dg;
-		image[(x*3)+(3*y*X_SIZE)+2]=db;
-
-		image[((x)*3)+(3*(y+1)*X_SIZE)]=sr;
-		image[((x)*3)+(3*(y+1)*X_SIZE)+1]=sg;
-		image[((x)*3)+(3*(y+1)*X_SIZE)+2]=sb;
-
-		afterr = score(image,x,y);
-		afterr += score(image,x,y+1);
-
-
-		if (afterr<before && afterr<afteru){ //printf ("Right!\n");
-						     }
-		else if (afteru<before){
-		// put it back;
-		image[(x*3)+(3*y*X_SIZE)]=sr;
-		image[(x*3)+(3*y*X_SIZE)+1]=sg;
-		image[(x*3)+(3*y*X_SIZE)+2]=sb;
-
-		image[((x+1)*3)+(3*y*X_SIZE)]=dr;
-		image[((x+1)*3)+(3*y*X_SIZE)+1]=dg;
-		image[((x+1)*3)+(3*y*X_SIZE)+2]=db;
-
-		// swap 
-		sr=image[(x*3)+(3*y*X_SIZE)];
-		sg=image[(x*3)+(3*y*X_SIZE)+1];
-		sb=image[(x*3)+(3*y*X_SIZE)+2];
-
-		dr=image[((x+1)*3)+(3*y*X_SIZE)];
-		dg=image[((x+1)*3)+(3*y*X_SIZE)+1];
-		db=image[((x+1)*3)+(3*y*X_SIZE)+2];
-
-
-		image[(x*3)+(3*y*X_SIZE)]=dr;
-		image[(x*3)+(3*y*X_SIZE)+1]=dg;
-		image[(x*3)+(3*y*X_SIZE)+2]=db;
-
-		image[((x+1)*3)+(3*y*X_SIZE)]=sr;
-		image[((x+1)*3)+(3*y*X_SIZE)+1]=sg;
-		image[((x+1)*3)+(3*y*X_SIZE)+2]=sb;
-		//printf ("UP \n");
-		}else{
-		//put it back
-		image[(x*3)+(3*y*X_SIZE)]=sr;
-		image[(x*3)+(3*y*X_SIZE)+1]=sg;
-		image[(x*3)+(3*y*X_SIZE)+2]=sb;
-
-		image[((x+1)*3)+(3*y*X_SIZE)]=dr;
-		image[((x+1)*3)+(3*y*X_SIZE)+1]=dg;
-		image[((x+1)*3)+(3*y*X_SIZE)+2]=db;
-
-
+		switch (sel) {
+  			case 0:
+    			//printf("up\n");
+			swap (image,x,y,0,-1,0,7);
+			y+=0.412;
+    			break;
+  			case 1:
+    			//printf("down\n");
+			swap (image,x,y,0,1,0,-7);
+			y-=0.412;
+    			break;
+  			case 2:
+    			//printf("right\n");
+			swap (image,x,y,-1,0,7,0);
+			x+=0.412;
+    			break;
+  			case 3:
+    			//printf("left\n");
+			swap (image,x,y,1,0,-7,0);
+			x-=0.412;
+    			break;
+  			case 4:
+    			//printf("up right\n");
+			swap (image,x,y,-1,-1,7,7);
+			y+=0.412; x+=0.412;
+    			break;
+  			case 5:
+    			//printf("up left\n");
+			swap (image,x,y,1,-1,-7,7);
+			y+=0.412; x-=0.412;
+			break;
+  			case 6:
+    			//printf("down left\n");
+			swap (image,x,y,1,1,-7,-7);
+			y-=0.412; x-=0.412;
+			break;
+  			case 7:
+    			//printf("down right\n");
+			swap (image,x,y,-1,1,7,-7);
+			y-=0.412; x+=0.412;
+			break;
+			default:
+    			//printf("no\n");
+			//x=5+rand()%(X_SIZE-10);y=5+rand()%(Y_SIZE-10);
+			//x=X_SIZE/2; y=Y_SIZE/2;
+			//x=8+rand()%(X_SIZE-16);y=8+rand()%(Y_SIZE-16);
+			x+=((double)(rand()%12001)/1000)-6;
+			y+=((double)(rand()%12001)/1000)-6;
+			x=8+rand()%(X_SIZE-16);y=8+rand()%(Y_SIZE-16);
+			//x=8+rand()%(X_SIZE-16);y=8+rand()%(Y_SIZE-16);
+			break;
+		}
+			x+=((double)(rand()%2001)/1000)-1;
+			y+=((double)(rand()%2001)/1000)-1;
+		if (x<8 || x>X_SIZE-8 || y<8 || y>Y_SIZE-8){
+			//x=X_SIZE/2; y=Y_SIZE/2;
+			//x=7+rand()%(X_SIZE-14);y=7+rand()%(Y_SIZE-14);
+			x=8+rand()%(X_SIZE-16);y=8+rand()%(Y_SIZE-16);
 		}
 
+			//x=7+rand()%(X_SIZE-14);y=7+rand()%(Y_SIZE-14);
+			//x=8+rand()%(X_SIZE-16);y=8+rand()%(Y_SIZE-16);
+			//x=5+rand()%(X_SIZE-10);y=5+rand()%(Y_SIZE-10);
 
-
-
-		//printf ("Frame %d Score %lf %lf\n",frame,before,after);
-		if (frame%5000000==0){disp(image,frame,0);}
+		//printf ("Frame %d x %d y %d\n",frame,x,y);
+		if (f%15000000==0){disp(image,frame,1);
+		
 		frame++;
+		}
+		f++;
+		//}}
 	}
 
 	scanf("%c",junk);
@@ -317,7 +455,7 @@ void disp (unsigned char *image2,int fram,int ab)
                 }
         }
 	XPutImage(dis, win, gc, x_image, 0, 0, 0, 0, X_SIZE, Y_SIZE);
-	sprintf(input,"./jpegs/pl%05d.jpg",fram);
+	sprintf(input,"./jpegs/rm%05d.jpg",fram);
 	if (ab){jayit(image2,X_SIZE, Y_SIZE, input);}
 	free (input);
 }
